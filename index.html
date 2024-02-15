@@ -1,0 +1,160 @@
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Data Table</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Z</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>4</td>
+                <td>2</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>6</td>
+                <td>3</td>
+                <td>9</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>1</td>
+                <td>5</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>8</td>
+                <td>4</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>2</td>
+                <td>7</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>3</td>
+                <td>1</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>9</td>
+                <td>6</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>5</td>
+                <td>9</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>7</td>
+                <td>8</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>4</td>
+                <td>10</td>
+                <td>3</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+-->
+<!DOCTYPE html>
+<html>
+<head>
+ <title>MPU6050 Control</title>
+ <script>
+  var sensorDataInterval;
+  function init() {
+    document.getElementById('startBtn').onclick = startSensor;
+    document.getElementById('stopBtn').onclick = stopSensor;
+    document.getElementById('clearDataBtn').onclick = clearData;
+  }
+
+  function generateRandomData() {
+    var sensorData = [];
+    for(var i = 0; i < 10; i++) {
+      sensorData.push(Math.floor(Math.random() * 10) + 1);
+    }
+    return sensorData.join(',');
+  }
+
+  function displayData() {
+    var sensorData = generateRandomData().split(',');
+    var table = document.getElementById('sensorDataTable');
+    var row = table.insertRow(-1);
+    for(var i = 0; i < sensorData.length; i++) {
+      var cell = row.insertCell(i);
+      cell.innerHTML = sensorData[i];
+    }
+  }
+
+  function startSensor() {
+    if (!sensorDataInterval) {
+      sensorDataInterval = setInterval(displayData, 500); // Generate data every 500ms
+    }
+    document.getElementById('clearDataBtn').style.display = 'none';
+    document.getElementById('startBtn').style.backgroundColor = '#ffca00';
+  }
+
+  function stopSensor() {
+    if (sensorDataInterval) {
+      clearInterval(sensorDataInterval);
+      sensorDataInterval = null;
+    }
+    document.getElementById('clearDataBtn').style.display = 'block';
+    document.getElementById('startBtn').style.backgroundColor = '#efefef';
+  }
+
+  function clearData() {
+    var table = document.getElementById('sensorDataTable');
+    var rowCount = table.rows.length;
+    for (var i = rowCount-1; i > 0; i--) {
+      table.deleteRow(i);
+    }
+    document.getElementById('clearDataBtn').style.display = 'none';
+    document.getElementById('startBtn').style.display = 'block';
+    document.getElementById('stopBtn').style.display = 'block';
+  }
+
+  window.onload = init;
+ </script>
+</head>
+<body>
+ <h1>MPU6050 Streaming Data</h1>
+ <span>
+    <button id="startBtn">Start</button>
+    <button id="stopBtn">Stop</button>
+    <button id="clearDataBtn" style="display:none;">Clear Data</button>
+ </span>
+ <table border="1" id="sensorDataTable">
+  <tr>
+   <th>Time</th><th>acc_x</th><th>acc_y</th><th>acc_z</th>
+   <th>gyro_x</th><th>gyro_y</th><th>gyro_z</th><th>Temp</th>
+   <th>roll</th><th>pitch</th>
+  </tr>
+ </table>
+</body>
+</html>
+
